@@ -8,29 +8,28 @@ public class NavigateTests extends TestBase {
 
     @Test
     public void scrollToSendUsAMassageForm(){
-       app.getHelperUser().contactBtnClick();
-       Assert.assertTrue(app.getHelperUser().sendUsAMassageFormIsHere());
+       app.getHelperNavigate().contactBtnClick();
+       Assert.assertTrue(app.getHelperNavigate().sendUsAMassageFormIsHere());
     }
     @Test
     public void scrollToOurLocationField(){
-        app.getHelperUser().locationBtnClick();
-        Assert.assertTrue(app.getHelperUser().ourLocationInformationIsHere());
+        app.getHelperNavigate().locationBtnClick();
+        Assert.assertTrue(app.getHelperNavigate().ourLocationInformationIsHere());
     }
     @Test
     public void scrollToOurRoomsField(){
-        app.getHelperUser().roomsBtnClick();
-        Assert.assertTrue(app.getHelperUser().ourRoomsFieldIsHere());
+        app.getHelperNavigate().roomsBtnClick();
+        Assert.assertTrue(app.getHelperNavigate().ourRoomsFieldIsHere());
     }
     @Test
     public void scrollToCheckAvailabilityForm(){
-        app.getHelperUser().bookingBtnClick();
-        Assert.assertTrue(app.getHelperUser().availabilityBtnIsHere());
+        app.getHelperNavigate().bookingBtnClick();
+        Assert.assertTrue(app.getHelperNavigate().availabilityBtnIsHere());
     }
     @Test
     public void scrollToTheEnd(){
-        app.getHelperUser().scrollToTheEnd();
-        Assert.assertTrue(app.getHelperUser().thisIsFooter());
-
+        app.getHelperNavigate().scrollToFooter();
+        Assert.assertTrue(app.getHelperNavigate().isFooterVisible());
     }
 
 }

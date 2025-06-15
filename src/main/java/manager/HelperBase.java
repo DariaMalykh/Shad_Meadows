@@ -1,9 +1,6 @@
 package manager;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -15,10 +12,18 @@ public class HelperBase {
     public HelperBase(WebDriver wd) {
         this.wd = wd;
     }
-
-    public boolean isElementPresent(By locator) {
-        List<WebElement> list = wd.findElements(locator);
-        return list.size() > 0;
+    public void type(By locator, String text){
+        WebElement element = wd.findElement(locator);
+        element.click();
+        element.clear();
+        clearNew(element);
+        if(text != null) {
+            element.sendKeys(text);
+        }
+    }
+    public void clearNew(WebElement element) {
+        element.sendKeys(" ");
+        element.sendKeys(Keys.BACK_SPACE);
     }
     public void pause(int time){
         try {
@@ -52,9 +57,41 @@ public class HelperBase {
             );
         });
     }
+    public boolean isElementPresent (By locator){
+        WebElement element = wd.findElement(locator);
+        return isElementInViewport(wd,element);
+    }
     public void scrollToElement(WebDriver driver, WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
 
     }
+    public void scrollUntilVisible(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) wd;
+
+        for (int i = 0; i < 20; i++) {
+            js.executeScript("window.scrollBy(0, 300);");
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Как только контактная форма видна — выходим
+            if (isElementInViewport(wd,element)) {
+                break;
+            }
+        }
+    }
+    public String getElementText(By locator) {
+        WebElement element = wd.findElement(locator);
+        String tagName = element.getTagName();
+        // Для input и textarea получаем значение из value
+        // if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("textarea")) {
+         //   return element.getAttribute("value");
+       // }
+        // Для остальных элементов — видимый текст
+        return element.getText();
+    }
+
+
 }
