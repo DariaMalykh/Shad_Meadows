@@ -76,7 +76,6 @@ public class HelperBase {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // Как только контактная форма видна — выходим
             if (isElementInViewport(wd,element)) {
                 break;
             }
@@ -84,12 +83,6 @@ public class HelperBase {
     }
     public String getElementText(By locator) {
         WebElement element = wd.findElement(locator);
-        String tagName = element.getTagName();
-        // Для input и textarea получаем значение из value
-        // if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("textarea")) {
-         //   return element.getAttribute("value");
-       // }
-        // Для остальных элементов — видимый текст
         return element.getText();
     }
 
