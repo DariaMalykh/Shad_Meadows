@@ -8,10 +8,13 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 public class ContactFormTests extends TestBase{
-
+    @BeforeMethod
+    public void precondition(){
+        app.getHelperUser().click(By.xpath("//span[contains(text(), 'Shady Meadows')]"));
+    }
 
     @Test
-    public void contactFormSuccessfullySubmittedAllFields(){
+    public void contactFormSuccessfullySubmitted(){
         User user = User.builder().name("Daria")
                 .email("d@gmail.com")
                 .phone("89127896765")
@@ -23,11 +26,72 @@ public class ContactFormTests extends TestBase{
         app.getHelperUser().clickSubmitBtn();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(app.getHelperUser().contactFormSuccessfullySubmitted());
-        softAssert.assertEquals("Thanks for getting in touch "+user.getName()+"!",
-                app.getHelperUser()
-                        .getElementText(By.xpath("//h3[contains(text(),'Thanks for getting in touch')]")));
+        softAssert.assertTrue(app.getHelperUser().isMessagePresent("Thanks for getting in touch "+user.getName()+"!"));
         softAssert.assertEquals(user.getSubject(),app.getHelperUser()
                 .getElementText(By.xpath("//p[text()='" + user.getSubject() + "']")));
         softAssert.assertAll();
     }
-}
+    @Test
+    public void contactFormIsBlank(){
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser()
+                .allMessageIsHere
+                        ("Message must be between 20 and 2000 characters. " +
+                                "Subject may not be blank " +
+                                "Name may not be blank " +
+                                "Message may not be blank " +
+                                "Subject must be between 5 and 100 characters. " +
+                                "Email may not be blank " +
+                                "Phone must be between 11 and 21 characters. " +
+                                "Phone may not be blank"));
+    }
+    @Test
+    public void contactFormBlankName(){
+        User user = User.builder().name("")
+                .email("d@gmail.com")
+                .phone("89127896765")
+                .subject("Problems")
+                .message("Houston we have problems!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().isAlertPresent("Name may not be blank"));
+    }
+    @Test
+    public void contactFormBlankEmail(){
+        User user = User.builder().name("Daria")
+                .email("")
+                .phone("89127896765")
+                .subject("Problems")
+                .message("Houston we have problems!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().isAlertPresent("Email may not be blank"));
+
+
+    }
+    @Test
+    public void contactFormBlankPhone(){
+        User user = User.builder().name("Daria")
+                .email("d@gmail.com")
+                .phone("")
+                .subject("Problems")
+                .message("Houston we have problems!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Phone may not be blank Phone must be between 11 and 21 characters. "));
+
+    }
+
+    }
+
