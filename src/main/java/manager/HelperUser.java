@@ -58,12 +58,21 @@ public class HelperUser extends HelperBase {
         );
         StringBuilder fullText = new StringBuilder();
         for (WebElement el : alertMessages) {
-            fullText.append(el.getText()).append(" ");
+            fullText.append(el.getText());
         }
         String result = fullText.toString();
-        Set<String> expectedWords = new HashSet<>(Arrays.asList(message.split("\\s+")));
-        Set<String> actualWords = new HashSet<>(Arrays.asList(result.split("\\s+")));
-        return actualWords.containsAll(expectedWords);
-    }
-
+        String[] resultSplit = result.split("(?=[A-Z])");
+        //Set<String> expectedWords = new HashSet<>(Arrays.asList(message.split("\\s+")));
+        // Set<String> actualWords = new HashSet<>(Arrays.asList(result.split("\\s+")));
+        // return actualWords.containsAll(expectedWords);
+        for (String rs : resultSplit) {
+            if (rs.isEmpty()) continue;
+            if (!message.contains(rs)) {
+                return false;
+            }
         }
+return true;
+    }
+}
+
+

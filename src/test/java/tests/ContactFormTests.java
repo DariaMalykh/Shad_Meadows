@@ -38,13 +38,13 @@ public class ContactFormTests extends TestBase{
         app.getHelperUser().scrollToAlertField();
         Assert.assertTrue(app.getHelperUser()
                 .allMessageIsHere
-                        ("Message must be between 20 and 2000 characters. " +
-                                "Subject may not be blank " +
-                                "Name may not be blank " +
-                                "Message may not be blank " +
-                                "Subject must be between 5 and 100 characters. " +
-                                "Email may not be blank " +
-                                "Phone must be between 11 and 21 characters. " +
+                        ("Message must be between 20 and 2000 characters." +
+                                "Subject may not be blank" +
+                                "Name may not be blank" +
+                                "Subject must be between 5 and 100 characters." +
+                                "Message may not be blank" +
+                                "Email may not be blank" +
+                                "Phone must be between 11 and 21 characters." +
                                 "Phone may not be blank"));
     }
     @Test
@@ -74,6 +74,7 @@ public class ContactFormTests extends TestBase{
         app.getHelperUser().clickSubmitBtn();
         app.getHelperUser().scrollToAlertField();
         Assert.assertTrue(app.getHelperUser().isAlertPresent("Email may not be blank"));
+        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Email may not be blank"));
 
 
     }
@@ -89,7 +90,8 @@ public class ContactFormTests extends TestBase{
         app.getHelperUser().fillSendAsMessageForm(user);
         app.getHelperUser().clickSubmitBtn();
         app.getHelperUser().scrollToAlertField();
-        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Phone may not be blank Phone must be between 11 and 21 characters. "));
+        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Phone may not be blank" +
+                "Phone must be between 11 and 21 characters."));
 
     }
 
