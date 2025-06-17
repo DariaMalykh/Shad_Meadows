@@ -12,6 +12,8 @@ public class ApplicationManager {
     HelperNavigate helperNavigate;
     @Getter
     HelperUser helperUser;
+    @Getter
+    HelperBooking helperBooking;
 
     public void init() {
         wd = new ChromeDriver();
@@ -20,6 +22,7 @@ public class ApplicationManager {
         wd.navigate().to("https://automationintesting.online/");
         helperNavigate = new HelperNavigate(wd);
         helperUser = new HelperUser(wd);
+        helperBooking = new HelperBooking(wd);
     }
 
     public void stop() {

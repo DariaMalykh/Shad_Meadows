@@ -59,7 +59,7 @@ public class HelperUser extends HelperBase {
         );
         StringBuilder fullText = new StringBuilder();
         for (WebElement el : alertMessages) {
-            fullText.append(el.getText());
+            fullText.append(el.getText()).append(" ");
         }
         String result = fullText.toString();
         if (result.isEmpty()) {

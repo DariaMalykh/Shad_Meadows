@@ -77,7 +77,6 @@ public class ContactFormTests extends TestBase{
         Assert.assertTrue(app.getHelperUser().isAlertPresent("Email may not be blank"));
         Assert.assertTrue(app.getHelperUser().allMessageIsHere("Email may not be blank"));
 
-
     }
     @Test
     public void contactFormBlankPhone(){
@@ -109,6 +108,82 @@ public class ContactFormTests extends TestBase{
         app.getHelperUser().scrollToAlertField();
         Assert.assertTrue(app.getHelperUser().allMessageIsHere("Subject may not be blank" +
                 "Subject must be between 5 and 100 characters."));
+
+    }
+    @Test
+    public void contactFormBlankMessage(){
+        User user = User.builder().name("Daria")
+                .email("d@gmail.com")
+                .phone("89127896765")
+                .subject("Problems")
+                .message("")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Message must be between 20 and 2000 characters." +
+                "Message may not be blank"));
+
+    }
+    @Test
+    public void contactFormWrongEmail(){
+        User user = User.builder().name("Daria")
+                .email("dgmail.com")
+                .phone("89127896765")
+                .subject("Problems")
+                .message("Houston we have problems!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().isAlertPresent("must be a well-formed email address"));
+
+    }
+    @Test
+    public void contactFormWrongSubject(){
+        User user = User.builder().name("Daria")
+                .email("d@gmail.com")
+                .phone("89127896765")
+                .subject("Prob")
+                .message("Houston we have problems!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().isAlertPresent("Subject must be between 5 and 100 characters."));
+
+    }
+    @Test
+    public void contactFormWrongPhone(){
+        User user = User.builder().name("Daria")
+                .email("d@gmail.com")
+                .phone("891")
+                .subject("Problems")
+                .message("Houston we have problems!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().isAlertPresent("Phone must be between 11 and 21 characters."));
+
+    }
+    @Test
+    public void contactFormWrongMessage(){
+        User user = User.builder().name("Daria")
+                .email("d@gmail.com")
+                .phone("89127896765")
+                .subject("Problems")
+                .message("Houston!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Message must be between 20 and 2000 characters."));
 
     }
 

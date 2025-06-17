@@ -6,6 +6,7 @@ public class BookingTests extends TestBase {
 
     @Test
     public void test(){
+        app.getHelperBooking().scrollToBookingForm();
 
     }
 
