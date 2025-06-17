@@ -60,6 +60,7 @@ public class ContactFormTests extends TestBase{
         app.getHelperUser().clickSubmitBtn();
         app.getHelperUser().scrollToAlertField();
         Assert.assertTrue(app.getHelperUser().isAlertPresent("Name may not be blank"));
+        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Name may not be blank"));
     }
     @Test
     public void contactFormBlankEmail(){
@@ -92,6 +93,22 @@ public class ContactFormTests extends TestBase{
         app.getHelperUser().scrollToAlertField();
         Assert.assertTrue(app.getHelperUser().allMessageIsHere("Phone may not be blank" +
                 "Phone must be between 11 and 21 characters."));
+
+    }
+    @Test
+    public void contactFormBlankSubject(){
+        User user = User.builder().name("Daria")
+                .email("d@gmail.com")
+                .phone("89127896765")
+                .subject("")
+                .message("Houston we have problems!")
+                .build();
+        app.getHelperUser().scrollToMessageField();
+        app.getHelperUser().fillSendAsMessageForm(user);
+        app.getHelperUser().clickSubmitBtn();
+        app.getHelperUser().scrollToAlertField();
+        Assert.assertTrue(app.getHelperUser().allMessageIsHere("Subject may not be blank" +
+                "Subject must be between 5 and 100 characters."));
 
     }
 

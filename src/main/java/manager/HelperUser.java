@@ -6,10 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class HelperUser extends HelperBase {
     public HelperUser(WebDriver wd) {
@@ -53,6 +51,9 @@ public class HelperUser extends HelperBase {
     }
 
     public boolean allMessageIsHere(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            return false;
+        }
         List<WebElement> alertMessages = wd.findElements(
                 By.xpath("//div[contains(@class, 'alert') and contains(@class, 'alert-danger')]//p")
         );
@@ -61,17 +62,25 @@ public class HelperUser extends HelperBase {
             fullText.append(el.getText());
         }
         String result = fullText.toString();
-        String[] resultSplit = result.split("(?=[A-Z])");
-        //Set<String> expectedWords = new HashSet<>(Arrays.asList(message.split("\\s+")));
-        // Set<String> actualWords = new HashSet<>(Arrays.asList(result.split("\\s+")));
-        // return actualWords.containsAll(expectedWords);
-        for (String rs : resultSplit) {
-            if (rs.isEmpty()) continue;
-            if (!message.contains(rs)) {
-                return false;
-            }
+        if (result.isEmpty()) {
+            return false;
         }
-return true;
+        List<String> resultList = Arrays.stream(result.split("(?=[A-Z])"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+        List<String> messageList = Arrays.stream(message.split("(?=[A-Z])"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+        Collections.sort(resultList);
+        Collections.sort(messageList);
+
+        return resultList.equals(messageList);
     }
 }
 
